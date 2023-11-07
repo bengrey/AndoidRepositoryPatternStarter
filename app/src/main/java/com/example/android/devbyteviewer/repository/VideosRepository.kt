@@ -30,6 +30,7 @@ import kotlinx.coroutines.withContext
  * Repository for fetching devbyte videos from the network and storing them on disk
  */
 class VideosRepository(private val database: VideosDatabase) {
+
     val videos: LiveData<List<DevByteVideo>> = Transformations.map(database.videoDao.getVideos()) {
         it.asDomainModel()
     }
@@ -38,7 +39,7 @@ class VideosRepository(private val database: VideosDatabase) {
         withContext(Dispatchers.IO) {
             val playlist = DevByteNetwork.devbytes.getPlaylist()
             database.videoDao.insertAll(playlist.asDatabaseModel())
-
         }
     }
+
 }
